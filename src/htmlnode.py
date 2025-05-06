@@ -1,3 +1,5 @@
+from textnode import *
+
 class HTMLNode():
     def __init__(self, tag = None, value = None, children = None, props = None):
         self.tag = tag
@@ -50,3 +52,21 @@ class ParentNode(HTMLNode):
                 children_html += child.to_html()
             return f"<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>"
 
+def text_node_to_html_node(text_node):
+    if text_node.text_type == None:
+        raise Exception
+    elif text_node.text_type.TEXT:
+        return LeafNode(value=text_node.text)
+    elif text_node.text_type.BOLD:
+        return LeafNode(tag= "b", value= text_node.text)
+    elif text_node.text_type.ITALIC:
+        return LeafNode(tag = "i", value= text_node.text)
+    elif text_node.text_type.CODE:
+        return LeafNode(tag= "code", value= text_node.text)
+    elif text_node.text_type.LINK:
+        return LeafNode(tag= "a",value= text_node.text, props= {"href": text_node.url})
+    elif text_node.text_type.IMAGE:
+        return LeafNode(tag= "img",  value= "", props= {"src": text_node.text, "alt": text_node.url})
+    else:
+        return LeafNode()
+        
